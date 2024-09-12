@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Caesar Cipher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+            border-color: #74b9ff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: #00b894;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00a884;
+        }
+
+        .result {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Caesar Cipher</h1>
+        
+        <form id="cipherForm">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" placeholder="Enter your message" required>
+
+            <label for="shift">Shift Value:</label>
+            <input type="number" id="shift" name="shift" placeholder="Enter shift value" required>
+
+            <label for="mode">Mode:</label>
+            <select id="mode" name="mode">
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+            </select>
+
+            <button type="submit">Process</button>
+        </form>
+
+        <div class="result" id="result">
+            <!-- Result will be displayed here -->
+        </div>
+
+        <footer>
+            &copy; 2024 Caesar Cipher Application
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('cipherForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const message = document.getElementById('message').value;
+            const shift = parseInt(document.getElementById('shift').value);
+            const mode = document.getElementById('mode').value;
+
+            if (!message || isNaN(shift)) {
+                resultDiv.textContent = "Please enter a valid message and shift value.";
+                return;
+            }
+
+            resultDiv.textContent = caesarCipher(message, shift, mode);
+        });
+
+        function caesarCipher(text, shift, mode) {
+            let result = '';
+            if (mode === 'decrypt') shift = -shift;
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+
+                if (char.match(/[a-z]/i)) {
+                    const code = text.charCodeAt(i);
+                    if (code >= 65 && code <= 90) {
+                        result += String.fromCharCode(((code - 65 + shift) % 26) + 65);
+                    } else if (code >= 97 && code <= 122) {
+                        result += String.fromCharCode(((code - 97 + shift) % 26) + 97);
+                    }
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+    </script>
+
+</body>
+</html>
